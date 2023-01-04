@@ -80,7 +80,7 @@ function init() {
   renderer.setAnimationLoop(animation);
   renderer.setClearColor( 0x000000, 1);
   document.body.appendChild(renderer.domElement);
-  document.getElementsByClassName("name")[0].value = localStorage.getItem("name");
+  // document.getElementsByClassName("name")[0].value = localStorage.getItem("name");
 }
 
 function startGame() {
@@ -202,8 +202,8 @@ replayButton.addEventListener("mouseup", (e) => {
     startGame();
     replayButton.setAttribute('disabled', true);
   }, 10);
-  let username = document.getElementsByClassName("name")[1].value;
-  localStorage.setItem("name", username);
+  // let username = document.getElementsByClassName("name")[1].value;
+  // localStorage.setItem("name", username);
   return;
 });
 
@@ -213,8 +213,8 @@ playButton.addEventListener("click", (e) => {
     startGame();
     replayButton.setAttribute('disabled', true);
   }, 10);
-  let username = document.getElementsByClassName("name")[0].value;
-  localStorage.setItem("name", username);
+  // let username = document.getElementsByClassName("name")[0].value;
+  // localStorage.setItem("name", username);
   return;
 });
 
@@ -296,7 +296,7 @@ function missedTheSpot() {
     setTimeout(() => {
       resultsElement.style.display = "flex";
       replayButton.removeAttribute('disabled');
-      document.getElementsByClassName("name")[1].value = localStorage.getItem("name");
+      // document.getElementsByClassName("name")[1].value = localStorage.getItem("name");
     }, 1000);
   }
 }
