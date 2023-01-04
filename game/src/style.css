@@ -66,25 +66,52 @@ a:visited {
   padding-left: 10px;
 }
 
-.mainMessage {
-  top: calc((100% - 100px) / 2);
-  text-align: center;
-  align-items: center;
-  font-size: 18px;
-  height: auto;
-  margin: 0 auto;
-  padding: 10px;
-  position: relative;
+@media screen and (min-width: 351px) {
+  .mainMessage {
+    top: calc((100% - 100px) / 2);
+    width: 80%;
+    left: calc((100% - 80%) / 2);
+    text-align: center;
+    align-items: center;
+    font-size: 18px;
+    height: auto;
+    padding: 10px;
+    position: absolute;
+  }
+  
+  .bottomButton {
+    width: 300px;
+    left: calc((100% - 300px) / 2);
+    bottom: 50px;
+    text-align: center;
+    align-items: center;
+    font-size: 18px;
+    position: absolute;
+  }
 }
 
-.bottomButton {
-  width: 80%;
-  left: calc((100% - 80%) / 2);
-  bottom: 50px;
-  text-align: center;
-  align-items: center;
-  font-size: 18px;
-  position: absolute;
+@media screen and (max-width: 350px) {
+  .mainMessage {
+    top: calc((100% - 100px) / 2);
+    width: 80%;
+    left: calc((100% - 80%) / 2);
+    text-align: center;
+    align-items: center;
+    font-size: 18px;
+    height: auto;
+    padding: 10px;
+    position: absolute;
+  }
+  
+  .bottomButton {
+    width: 80%;
+    left: calc((100% - 80%) / 2);
+    bottom: 50px;
+    text-align: center;
+    align-items: center;
+    font-size: 18px;
+    position: absolute;
+  }
 }
 
 div h2 {
