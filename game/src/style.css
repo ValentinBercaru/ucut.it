@@ -1,0 +1,68 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap");
+
+body {
+  margin: 0;
+  color: white;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#instructions {
+  display: none;
+}
+
+#results,
+body #instructions {
+  position: fixed;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(20, 20, 20, 0.75);
+}
+
+a:visited {
+  color: inherit;
+}
+
+#results {
+  display: none;
+  cursor: default;
+}
+
+#results .content,
+#instructions .content {
+  max-width: 300px;
+  padding: 50px;
+  border-radius: 20px;
+}
+
+#score {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-size: 3em;
+  font-weight: bold;
+  top: 100px;
+}
+
+.tapToPlay {
+  position: relative;
+  left:calc((100% - 100%) / 2);
+  width: 100%;
+  height: 60px;
+  font: normal normal 24px Verdana;
+  border: 0px;
+  color: white;
+  background: #00c127;
+}
+
+.name {
+  width: 96%;
+  height: 60px;
+  border: 0px;
+  font: normal normal 24px Verdana;
+  margin-bottom: 5px;
+  padding-left: 10px;
+}
