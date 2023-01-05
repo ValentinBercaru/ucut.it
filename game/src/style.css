@@ -42,7 +42,7 @@ a:visited {
   color: white;
   font-size: 3em;
   font-weight: bold;
-  top: 80px;
+  top: 120px;
 }
 
 .tapToPlay {
@@ -83,7 +83,7 @@ a:visited {
   .bottomButton {
     width: 300px;
     left: calc((100% - 300px) / 2);
-    bottom: 50px;
+    bottom: 150px;
     text-align: center;
     align-items: center;
     font-size: 18px;
@@ -107,7 +107,7 @@ a:visited {
   .bottomButton {
     width: 80%;
     left: calc((100% - 80%) / 2);
-    bottom: 50px;
+    bottom: 150px;
     text-align: center;
     align-items: center;
     font-size: 18px;
