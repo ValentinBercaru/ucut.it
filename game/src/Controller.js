@@ -18,6 +18,7 @@ let currentColor = Math.floor(Math.random() * 350);
 const scoreElement = document.getElementById("score");
 const instructionsElement = document.getElementById("instructions");
 const resultsElement = document.getElementById("results");
+const footer = document.getElementById("footer");
 
 init();
 
@@ -92,6 +93,7 @@ function startGame() {
 
   if (instructionsElement) instructionsElement.style.display = "none";
   if (resultsElement) resultsElement.style.display = "none";
+  if (footer) footer.style.display = "none";
   if (scoreElement) scoreElement.innerText = 0;
 
   if (world) {
@@ -295,6 +297,7 @@ function missedTheSpot() {
   if (resultsElement && !autopilot) {
     setTimeout(() => {
       resultsElement.style.display = "flex";
+      footer.style.display = "initial";
       replayButton.removeAttribute('disabled');
       // document.getElementsByClassName("name")[1].value = localStorage.getItem("name");
     }, 1000);
