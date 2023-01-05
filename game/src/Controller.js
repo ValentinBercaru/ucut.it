@@ -75,10 +75,10 @@ function init() {
   scene.add(dirLight);
 
   // Set up renderer
-  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setAnimationLoop(animation);
-  renderer.setClearColor( 0x000000, 1);
+  renderer.setClearColor( 0x000000, 0);
   document.body.appendChild(renderer.domElement);
   // document.getElementsByClassName("name")[0].value = localStorage.getItem("name");
 }

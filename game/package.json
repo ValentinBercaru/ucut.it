@@ -12,5 +12,8 @@
   "dependencies": {
     "cannon": "^0.6.2",
     "three": "^0.148.0"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.8.2"
   }
 }
