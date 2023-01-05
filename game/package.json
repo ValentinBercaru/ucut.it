@@ -14,6 +14,8 @@
     "three": "^0.148.0"
   },
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.8.2"
+    "@parcel/packager-raw-url": "^2.8.2",
+    "@parcel/transformer-sass": "^2.8.2",
+    "@parcel/transformer-webmanifest": "^2.8.2"
   }
 }
