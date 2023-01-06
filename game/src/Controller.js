@@ -307,7 +307,7 @@ function missedTheSpot() {
 function animation(time) {
   if (lastTime) {
     const timePassed = time - lastTime;
-    const speed = 0.008;
+    const speed = 0.008 * 0.9;
 
     const topLayer = stack[stack.length - 1];
     const previousLayer = stack[stack.length - 2];
