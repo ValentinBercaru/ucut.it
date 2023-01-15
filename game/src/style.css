@@ -23,7 +23,7 @@ a:visited {
   color: inherit;
 }
 
-#results {
+#results, #indeterminate {
   display: none;
 }
 

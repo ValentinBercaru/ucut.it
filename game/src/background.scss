@@ -3,9 +3,9 @@ $color-bg: #000000;
 $color-particle: #fff;
 $spacing: 2560px;
 $time-1: 60s;
-$time-2: 120s;
+$time-2: 60s;
 $time-3: 180s;
-$time-4: 200s;
+$time-4: 120s;
 
 /* mixins */
 @function particles($max) {
@@ -42,28 +42,28 @@ $time-4: 200s;
 
 .particle-2 {
   animation: animParticle $time-2 linear infinite;
-  @include particles(500);
+  @include particles(800);
   height: 2px;
   width: 2px;
 }
 
 .particle-2:after {
-  @include particles(500);
+  @include particles(800);
   height: 3px;
   width: 3px;
 }
 
 .particle-4 {
   animation: animParticle $time-4 linear infinite;
-  @include particles(500);
+  @include particles(800);
   height: 1px;
   width: 1px;
 }
 
 .particle-4:after {
-  @include particles(500);
-  height: 1px;
-  width: 1px;
+  @include particles(800);
+  height: 2px;
+  width: 2px;
 }
 
 @keyframes animParticle {
@@ -71,6 +71,6 @@ $time-4: 200s;
     transform: translateY(-$spacing);
   }
   to {
-    transform: translateY($spacing * 1);
+    transform: translateY(0px * 1);
   }
 }

@@ -14,17 +14,21 @@ let autopilot;
 let gameEnded;
 let robotPrecision; // Determines how precise the game is on autopilot
 let currentColor = Math.floor(Math.random() * 350);
+let gameOverTimeout;
+let endCameraTimeout;
+let adTimeout;
 
 const scoreElement = document.getElementById("score");
 const instructionsElement = document.getElementById("instructions");
 const resultsElement = document.getElementById("results");
 const footer = document.getElementById("footer");
+const indeterminate = document.getElementById("indeterminate");
 
 init();
 
 // Determines how precise the game is on autopilot
 function setRobotPrecision() {
-  robotPrecision = 0.1 * Math.random() * 2;
+  robotPrecision = 0.1 * Math.random() * 2.5;
 }
 
 function init() {
@@ -81,7 +85,6 @@ function init() {
   renderer.setAnimationLoop(animation);
   renderer.setClearColor( 0x000000, 0);
   document.body.appendChild(renderer.domElement);
-  // document.getElementsByClassName("name")[0].value = localStorage.getItem("name");
 }
 
 function startGame() {
@@ -119,6 +122,19 @@ function startGame() {
   }
 
   if (camera) {
+    const aspect = window.innerWidth / window.innerHeight;
+    const width = 10;
+    const height = width / aspect;
+  
+    camera = new THREE.OrthographicCamera(
+      width / -2, // left
+      width / 2, // right
+      height / 1.5, // top
+      height / -2, // bottom
+      0, // near plane
+      100 // far plane
+    );
+
     // Reset camera positions
     camera.position.set(4, 4, 4);
     camera.lookAt(0, 0, 0);
@@ -194,18 +210,18 @@ if (window.outerWidth > 600) {
   window.addEventListener("click", eventHandler);
 } else {
   window.addEventListener("touchstart", eventHandler);
+  
 }
 const replayButton = document.getElementById("replay");
 const playButton = document.getElementById("play");
+const skipButton = document.getElementById("skip");
 
 replayButton.addEventListener("mouseup", (e) => {
   e.preventDefault();
   setTimeout(() => {
     startGame();
-    replayButton.setAttribute('disabled', true);
-  }, 10);
-  // let username = document.getElementsByClassName("name")[1].value;
-  // localStorage.setItem("name", username);
+    window.location.hash = '#playing';
+  });
   return;
 });
 
@@ -213,10 +229,20 @@ playButton.addEventListener("click", (e) => {
   e.preventDefault();
   setTimeout(() => {
     startGame();
-    replayButton.setAttribute('disabled', true);
-  }, 10);
-  // let username = document.getElementsByClassName("name")[0].value;
-  // localStorage.setItem("name", username);
+    window.location.hash = '#playing';
+  });
+  return;
+});
+
+skipButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  setTimeout(() => {
+    clearTimeout(gameOverTimeout);
+    clearTimeout(endCameraTimeout);
+    clearTimeout(adTimeout);
+    showGameOver();
+    window.location.hash = '#gameover';
+  }, 100);
   return;
 });
 
@@ -228,7 +254,22 @@ window.addEventListener("keydown", function (event) {
   }
 });
 
+window.addEventListener("touchend", () => {
+  setTimeout(() => {
+    skipButton.removeAttribute('disabled');
+  }, 10);
+});
+
+window.addEventListener("mouseup", () => {
+  setTimeout(() => {
+    skipButton.removeAttribute('disabled');
+  }, 10);
+});
+
 function eventHandler() {
+  if (!gameEnded) {
+    skipButton.setAttribute('disabled', true);
+  }
   if (!autopilot) {
     splitBlockAndAddNextOneIfOverlaps()
   };
@@ -270,8 +311,8 @@ function splitBlockAndAddNextOneIfOverlaps() {
     // Next layer
     const nextX = direction == "x" ? topLayer.threejs.position.x : -10;
     const nextZ = direction == "z" ? topLayer.threejs.position.z : -10;
-    const newWidth = topLayer.width; // New layer has the same size as the cut top layer
-    const newDepth = topLayer.depth; // New layer has the same size as the cut top layer
+    const newWidth = (overhangSize > size / 20) ? topLayer.width : Math.min(3, topLayer.width + 0.15); // New layer has the same size as the cut top layer
+    const newDepth = (overhangSize > size / 20) ? topLayer.depth : Math.min(3, topLayer.depth + 0.15); // New layer has the same size as the cut top layer
     const nextDirection = direction == "x" ? "z" : "x";
 
     if (scoreElement) scoreElement.innerText = stack.length - 1;
@@ -281,33 +322,10 @@ function splitBlockAndAddNextOneIfOverlaps() {
   }
 }
 
-function missedTheSpot() {
-  const topLayer = stack[stack.length - 1];
-  // Turn to top layer into an overhang and let it fall down
-  addOverhang(
-    topLayer.threejs.position.x,
-    topLayer.threejs.position.z,
-    topLayer.width,
-    topLayer.depth
-  );
-  world.remove(topLayer.cannonjs);
-  scene.remove(topLayer.threejs);
-
-  gameEnded = true;
-  if (resultsElement && !autopilot) {
-    setTimeout(() => {
-      resultsElement.style.display = "flex";
-      footer.style.display = "initial";
-      replayButton.removeAttribute('disabled');
-      // document.getElementsByClassName("name")[1].value = localStorage.getItem("name");
-    }, 1000);
-  }
-}
-
 function animation(time) {
   if (lastTime) {
     const timePassed = time - lastTime;
-    const speed = 0.008 * 0.9;
+    const speed = 0.008;
 
     const topLayer = stack[stack.length - 1];
     const previousLayer = stack[stack.length - 2];
@@ -327,7 +345,7 @@ function animation(time) {
       topLayer.threejs.position[topLayer.direction] += speed * timePassed;
       topLayer.cannonjs.position[topLayer.direction] += speed * timePassed;
 
-      // If the box went beyond the stack then show up the fail screen
+      // If the user does not press any action the game is over since the block is out of screen.
       if (topLayer.threejs.position[topLayer.direction] > 10) {
         missedTheSpot();
       }
@@ -349,6 +367,56 @@ function animation(time) {
     renderer.render(scene, camera);
   }
   lastTime = time;
+}
+
+function missedTheSpot() {
+  const topLayer = stack[stack.length - 1];
+  // Turn to top layer into an overhang and let it fall down
+  addOverhang(
+    topLayer.threejs.position.x,
+    topLayer.threejs.position.z,
+    topLayer.width,
+    topLayer.depth
+  );
+  world.remove(topLayer.cannonjs);
+  scene.remove(topLayer.threejs);
+
+  gameEnded = true;
+
+  const aspect = window.innerWidth / window.innerHeight;
+  const width = 35;
+  const height = width / aspect;
+
+  endCameraTimeout = setTimeout(() => {
+    camera = new THREE.OrthographicCamera(
+      width / -2, // left
+      width / 2, // right
+      height / 1.5, // top
+      height / -2, // bottom
+      0, // near plane
+      100 // far plane
+    );
+
+    camera.position.set(4, 4, 4);
+    camera.lookAt(0, 0, 0);
+  }, 1250);
+
+  if (resultsElement && !autopilot) {
+    indeterminate.style.display = "initial";
+    window.location.hash = '#review';
+    adTimeout = setTimeout(() => {
+        window.location.hash = '#gameover';
+    }, 120 * stack.length);
+    gameOverTimeout = setTimeout(() => {
+      showGameOver();
+    }, 125 * stack.length + 2500);
+  }
+}
+
+function showGameOver() {
+  indeterminate.style.display = "none";
+  resultsElement.style.display = "flex";
+  footer.style.display = "initial";
 }
 
 function updatePhysics(timePassed) {
