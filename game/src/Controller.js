@@ -16,6 +16,7 @@ let robotPrecision; // Determines how precise the game is on autopilot
 let currentColor = Math.floor(Math.random() * 350);
 let gameOverTimeout;
 let endCameraTimeout;
+let adTimeout;
 
 const scoreElement = document.getElementById("score");
 const instructionsElement = document.getElementById("instructions");
@@ -219,6 +220,7 @@ replayButton.addEventListener("mouseup", (e) => {
   e.preventDefault();
   setTimeout(() => {
     startGame();
+    window.location.hash = '#playing';
   });
   return;
 });
@@ -227,6 +229,7 @@ playButton.addEventListener("click", (e) => {
   e.preventDefault();
   setTimeout(() => {
     startGame();
+    window.location.hash = '#playing';
   });
   return;
 });
@@ -236,7 +239,9 @@ skipButton.addEventListener("click", (e) => {
   setTimeout(() => {
     clearTimeout(gameOverTimeout);
     clearTimeout(endCameraTimeout);
+    clearTimeout(adTimeout);
     showGameOver();
+    window.location.hash = '#gameover';
   }, 100);
   return;
 });
@@ -398,6 +403,10 @@ function missedTheSpot() {
 
   if (resultsElement && !autopilot) {
     indeterminate.style.display = "initial";
+    window.location.hash = '#review';
+    adTimeout = setTimeout(() => {
+        window.location.hash = '#gameover';
+    }, 120 * stack.length);
     gameOverTimeout = setTimeout(() => {
       showGameOver();
     }, 125 * stack.length + 2500);
